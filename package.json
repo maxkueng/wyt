@@ -1,6 +1,6 @@
 {
   "name": "wyt",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A time-based rate limiter using promises",
   "author": "Max Kueng (https://maxkueng.com/contact)",
   "license": "MIT",
