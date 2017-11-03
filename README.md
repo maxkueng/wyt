@@ -2,6 +2,9 @@ wyt - wait your turn
 ====================
 
 [![Build Status](https://travis-ci.org/maxkueng/wyt.svg)](https://travis-ci.org/maxkueng/wyt)
+[![Codebeat badge](https://codebeat.co/badges/af8d6a72-3709-4f59-887f-b30f9b0cce55)](https://codebeat.co/projects/github-com-maxkueng-wyt-master)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/20ca348079de40a484aee2ebfb4b8fe5)](https://www.codacy.com/app/maxkueng/wyt?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=maxkueng/wyt&amp;utm_campaign=Badge_Grade)
+[![Maintainability](https://api.codeclimate.com/v1/badges/306ee5df3480babf4d9d/maintainability)](https://codeclimate.com/github/maxkueng/wyt/maintainability)
 [![Coverage Status](https://coveralls.io/repos/maxkueng/wyt/badge.svg?branch=master&service=github)](https://coveralls.io/github/maxkueng/wyt?branch=master)
 
 **wyt** is a time-based rate limiter that uses promises.
