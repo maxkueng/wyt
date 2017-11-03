@@ -1,0 +1,56 @@
+{
+  "name": "wyt",
+  "version": "1.0.0",
+  "description": "A time-based rate limiter using promises",
+  "author": "Max Kueng (https://maxkueng.com/contact)",
+  "license": "MIT",
+  "homepage": "https://github.com/maxkueng/wyt",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/maxkueng/wyt.git"
+  },
+  "bugs": {
+    "url": "https://github.com/maxkueng/wyt/issues"
+  },
+  "main": "build/index.js",
+  "module": "build/index.es.js",
+  "jsnext:main": "build/index.es.js",
+  "files": [
+    "build"
+  ],
+  "scripts": {
+    "clean": "rimraf build",
+    "build:js": "rollup -c rollup.config.js",
+    "build": "npm-run-all -s clean build:js",
+    "lint": "eslint ./*.js",
+    "lint:fix": "eslint --fix .*.js",
+    "flow": "flow check",
+    "test:js": "nyc ava",
+    "test": "npm-run-all lint flow test:js",
+    "publish-coverage": "nyc report --reporter=text-lcov | coveralls"
+  },
+  "devDependencies": {
+    "ava": "^0.23.0",
+    "babel-cli": "^6.26.0",
+    "babel-eslint": "^8.0.1",
+    "coveralls": "^3.0.0",
+    "eslint": "^4.10.0",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-flowtype": "^2.39.1",
+    "eslint-plugin-import": "^2.8.0",
+    "flow-bin": "^0.58.0",
+    "npm-run-all": "^4.1.1",
+    "nyc": "^11.3.0",
+    "rimraf": "^2.6.2",
+    "rollup": "^0.50.0",
+    "rollup-plugin-babel": "^3.0.2",
+    "rollup-plugin-commonjs": "^8.2.6",
+    "rollup-plugin-flow": "^1.1.1"
+  },
+  "engines": {
+    "node": ">=7.6.0"
+  },
+  "ava": {
+    "require": "babel-register"
+  }
+}
