@@ -11,7 +11,7 @@ type State = {
   availableTurns: number;
 };
 
-function reload(turnsPerInterval: number, interval: number, state: State) {
+function reload(turnsPerInterval: number, interval: number, state: State): State {
   const throughput = turnsPerInterval / interval;
   const now = Date.now();
   const reloadTime = Math.min(now - state.lastReload, interval);
