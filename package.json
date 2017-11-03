@@ -26,7 +26,7 @@
     "lint:fix": "eslint --fix .*.js",
     "flow": "flow check",
     "test:js": "nyc ava",
-    "test": "npm-run-all lint flow test:js",
+    "test": "npm-run-all -s build lint flow test:js",
     "publish-coverage": "nyc report --reporter=text-lcov | coveralls"
   },
   "devDependencies": {
