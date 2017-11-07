@@ -1,7 +1,6 @@
 import * as path from 'path';
 import * as fs from 'fs';
 import babel from 'rollup-plugin-babel';
-import flow from 'rollup-plugin-flow';
 import pkg from './package.json';
 
 const license = fs.readFileSync(path.resolve('LICENSE'), 'utf-8');
@@ -22,9 +21,12 @@ export default {
   sourcemap: true,
   banner,
   plugins: [
-    flow(),
     babel({
       babelrc: false,
+      plugins: [
+        'syntax-flow',
+        'transform-flow-comments',
+      ],
     }),
   ],
   output: [

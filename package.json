@@ -52,6 +52,8 @@
     "ava": "^0.23.0",
     "babel-cli": "^6.26.0",
     "babel-eslint": "^8.0.1",
+    "babel-plugin-syntax-flow": "^6.18.0",
+    "babel-plugin-transform-flow-comments": "^6.22.0",
     "coveralls": "^3.0.0",
     "eslint": "^4.10.0",
     "eslint-config-airbnb-base": "^12.1.0",
@@ -63,8 +65,7 @@
     "rimraf": "^2.6.2",
     "rollup": "^0.50.0",
     "rollup-plugin-babel": "^3.0.2",
-    "rollup-plugin-commonjs": "^8.2.6",
-    "rollup-plugin-flow": "^1.1.1"
+    "rollup-plugin-commonjs": "^8.2.6"
   },
   "engines": {
     "node": ">=7.6.0"
