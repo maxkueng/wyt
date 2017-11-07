@@ -19,6 +19,7 @@ function reload(turnsPerInterval: number, interval: number, state: State): State
   const newAvalableTurns = state.availableTurns + reloadedTurns;
 
   return {
+    ...state,
     lastReload: now,
     availableTurns: Math.min(newAvalableTurns, turnsPerInterval),
   };
