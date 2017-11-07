@@ -26,6 +26,10 @@ export default {
       plugins: [
         'syntax-flow',
         'transform-flow-comments',
+        [
+          'transform-object-rest-spread',
+          { useBuiltIns: true },
+        ],
       ],
     }),
   ],
