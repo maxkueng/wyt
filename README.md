@@ -18,25 +18,31 @@ wyt - wait your turn
 
  - Promise-based API
  - Full test coverage
- - Flow typed (published Flow definitions coming soon)
+ - Flow typed
+ - Easy to use
 
 ## Installation
 
+Requires Node.js [>= 7.6 with async/await][nodegreen-async] support.
+
 ```sh
-npm install wyt
+npm install --save wyt
 ```
 
 ## Usage
+
+Just put it in front of your HTTP requests.
 
 ```js
 import wyt from 'wyt';
 
 // 5 api calls per second
-const waitTurn = wyt(5, 1000);
+const rateLimit = wyt(5, 1000);
 
-async function apiCall() {
-  await waitTurn();
-  // so stuff
+async function getStuff() {
+  await rateLimit();
+  const response = await fetch('/stuff');
+  return response.json();
 }
 ```
 
@@ -82,7 +88,6 @@ import wyt from 'wyt';
  */
 function timePassed() {
   this.start = this.start || Date.now();
-  now = now || Date.now();
   return Math.round(((Date.now() - this.start) / 1000) * 10) / 10;
 }
 
@@ -156,3 +161,6 @@ console.log(`Gwendolyn waited ${timePassed()} seconds`);
 Copyright (c) 2017 Max Kueng
 
 MIT License
+
+
+[nodegreen-async]: http://node.green/#ES2017-features-async-functions
