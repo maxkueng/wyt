@@ -23,8 +23,6 @@ wyt - wait your turn
 
 ## Installation
 
-Requires Node.js [>= 7.6 with async/await][nodegreen-async] support.
-
 ```sh
 npm install --save wyt
 ```

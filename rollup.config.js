@@ -26,6 +26,7 @@ export default {
       plugins: [
         'syntax-flow',
         'transform-flow-comments',
+        'transform-async-to-generator',
         [
           'transform-object-rest-spread',
           { useBuiltIns: true },
