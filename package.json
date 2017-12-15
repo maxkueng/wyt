@@ -1,6 +1,6 @@
 {
   "name": "wyt",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "A time-based rate limiter using promises",
   "keywords": [
     "throttle",
