@@ -43,8 +43,8 @@ export default function wyt(turnsPerInterval: number, interval: number) {
     const turnsToWait = Math.max(0, turns - state.availableTurns);
     const wait = Math.ceil(turnsToWait * timePerTurn);
 
-    await sleep(wait);
     state.availableTurns -= turns;
+    await sleep(wait);
     return wait;
   }
 
