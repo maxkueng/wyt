@@ -37,6 +37,32 @@ test('1 per second', async (t) => {
   t.true(roughly(t5, interval / rpi));
 });
 
+test('1 per second in parallel', async (t) => {
+  const start = Date.now();
+  const rpi = 1;
+  const interval = 1000;
+  const waitTurn = wyt(rpi, interval);
+
+  const promises = [
+    waitTurn(),
+    waitTurn(),
+    waitTurn(),
+    waitTurn(),
+    waitTurn(),
+  ];
+
+  const [t1, t2, t3, t4, t5] = await Promise.all(promises);
+  t.true(roughly(4000, timePassed(start)));
+
+  t.log([t1, t2, t3, t4, t5]);
+
+  t.true(roughly(t1, 0 * (interval / rpi)));
+  t.true(roughly(t2, 1 * (interval / rpi)));
+  t.true(roughly(t3, 2 * (interval / rpi)));
+  t.true(roughly(t4, 3 * (interval / rpi)));
+  t.true(roughly(t5, 4 * (interval / rpi)));
+});
+
 test('2 per second', async (t) => {
   const start = Date.now();
   const rpi = 2;
@@ -61,6 +87,32 @@ test('2 per second', async (t) => {
   t.true(roughly(t3, interval / rpi));
   t.true(roughly(t4, interval / rpi));
   t.true(roughly(t5, interval / rpi));
+});
+
+test('2 per second in parallel', async (t) => {
+  const start = Date.now();
+  const rpi = 2;
+  const interval = 1000;
+  const waitTurn = wyt(rpi, interval);
+
+  const promises = [
+    waitTurn(),
+    waitTurn(),
+    waitTurn(),
+    waitTurn(),
+    waitTurn(),
+  ];
+
+  const [t1, t2, t3, t4, t5] = await Promise.all(promises);
+  t.true(roughly(3 * (interval / rpi), timePassed(start)));
+
+  t.log([t1, t2, t3, t4, t5]);
+
+  t.true(roughly(t1, 0 * (interval / rpi)));
+  t.true(roughly(t2, 0 * (interval / rpi)));
+  t.true(roughly(t3, 1 * (interval / rpi)));
+  t.true(roughly(t4, 2 * (interval / rpi)));
+  t.true(roughly(t5, 3 * (interval / rpi)));
 });
 
 
