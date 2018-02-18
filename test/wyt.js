@@ -1,13 +1,13 @@
 import test from 'ava';
 import wyt from '../build';
 
-function timePassed(since) {
-  return Math.round(((Date.now() - since) / 1000) * 10) / 10;
+function timePassed(since, accuracy = 100) {
+  return Math.round((Date.now() - since) / accuracy) * accuracy;
 }
 
-function roughly(value, expected, round = 100) {
-  const v = Math.round(value / round) * round;
-  const e = Math.round(expected / round) * round;
+function roughly(value, expected, accuracy = 100) {
+  const v = Math.round(value / accuracy) * accuracy;
+  const e = Math.round(expected / accuracy) * accuracy;
   return v === e;
 }
 
@@ -20,13 +20,13 @@ test('1 per second', async (t) => {
   const t1 = await waitTurn();
   t.is(0, timePassed(start));
   const t2 = await waitTurn();
-  t.is(1, timePassed(start));
+  t.is(1000, timePassed(start));
   const t3 = await waitTurn();
-  t.is(2, timePassed(start));
+  t.is(2000, timePassed(start));
   const t4 = await waitTurn();
-  t.is(3, timePassed(start));
+  t.is(3000, timePassed(start));
   const t5 = await waitTurn();
-  t.is(4, timePassed(start));
+  t.is(4000, timePassed(start));
 
   t.log([t1, t2, t3, t4, t5]);
 
@@ -48,11 +48,11 @@ test('2 per second', async (t) => {
   const t2 = await waitTurn();
   t.is(0, timePassed(start));
   const t3 = await waitTurn();
-  t.is(0.5, timePassed(start));
+  t.is(500, timePassed(start));
   const t4 = await waitTurn();
-  t.is(1, timePassed(start));
+  t.is(1000, timePassed(start));
   const t5 = await waitTurn();
-  t.is(1.5, timePassed(start));
+  t.is(1500, timePassed(start));
 
   t.log([t1, t2, t3, t4, t5]);
 
@@ -75,11 +75,11 @@ test('multiple turns per take', async (t) => {
   const t2 = await waitTurn();
   t.is(0, timePassed(start));
   const t3 = await waitTurn(2);
-  t.is(1, timePassed(start));
+  t.is(1000, timePassed(start));
   const t4 = await waitTurn();
-  t.is(1.5, timePassed(start));
+  t.is(1500, timePassed(start));
   const t5 = await waitTurn();
-  t.is(2, timePassed(start));
+  t.is(2000, timePassed(start));
 
   t.log([t1, t2, t3, t4, t5]);
 
