@@ -33,7 +33,7 @@ export default function wyt(turnsPerInterval: number, interval: number) {
     availableTurns: turnsPerInterval,
   };
 
-  async function waitTurn(turns?: number = 1): Promise<void> {
+  async function waitTurn(turns?: number = 1): Promise<number> {
     if (turns > turnsPerInterval) {
       throw new Error('Turns can not be greater than the number of turns per interval');
     }
@@ -43,8 +43,9 @@ export default function wyt(turnsPerInterval: number, interval: number) {
     const turnsToWait = Math.max(0, turns - state.availableTurns);
     const wait = Math.ceil(turnsToWait * timePerTurn);
 
-    await sleep(wait);
     state.availableTurns -= turns;
+    await sleep(wait);
+    return wait;
   }
 
   return waitTurn;

@@ -1,5 +1,5 @@
-wyt - wait your turn
-====================
+wyt - time-based rate limiter
+=============================
 
 [![Build Status](https://travis-ci.org/maxkueng/wyt.svg)](https://travis-ci.org/maxkueng/wyt)
 [![Codebeat badge](https://codebeat.co/badges/af8d6a72-3709-4f59-887f-b30f9b0cce55)](https://codebeat.co/projects/github-com-maxkueng-wyt-master)
@@ -7,11 +7,11 @@ wyt - wait your turn
 [![Maintainability](https://api.codeclimate.com/v1/badges/306ee5df3480babf4d9d/maintainability)](https://codeclimate.com/github/maxkueng/wyt/maintainability)
 [![Coverage Status](https://coveralls.io/repos/maxkueng/wyt/badge.svg?branch=master&service=github)](https://coveralls.io/github/maxkueng/wyt?branch=master)
 
-**wyt** is a time-based rate limiter that uses promises.
+**wyt** (pronounced _wait_) is a time-based rate limiter that uses promises.
 
 ## Use Cases
 
- - Limiting calls to APIs that only allow a limited number of calls within a
+ - Limiting calls to APIs that only allow a limited number of requests within a
    certain period.
 
 ## Features
@@ -34,7 +34,7 @@ Just put it in front of your HTTP requests.
 ```js
 import wyt from 'wyt';
 
-// 5 api calls per second
+// 5 API calls per second
 const rateLimit = wyt(5, 1000);
 
 async function getStuff() {
@@ -52,15 +52,17 @@ async function getStuff() {
    a certain interval.
  - `interval` _(number)_: The interval within which `turnsPerInterval` can be executed.
 
-Returns a function that can be called to "take a turn".
+Returns a function `(turns?: number) => Promise<number>` that can be called
+before before requesting a rate-limited resource (i.e. wait for its turn) in
+order to not exceed the limit.
 
-### await waitTurn(turns?: number)
+### const timeWaited = await waitTurn(turns?: number)
 
- - `turns` _(number, optional, default: 1)_: The number of turnsthat will be
+ - `turns` _(number, optional, default: 1)_: The number of turns that will be
    taken at the same time. You can not await more turns at the same time as
    `turnsPerInterval`.
 
-Returns a promise that will resolve as soon as another turn can be taken. If
+Returns a promise `Promise<number>` that will resolve with the time waited as soon as another turn can be taken. If
 more than `turnsPerInterval` are requested at the same time the promise will
 reject.
 
@@ -156,9 +158,7 @@ console.log(`Gwendolyn waited ${timePassed()} seconds`);
 
 ## License
 
-Copyright (c) 2017 Max Kueng
+Copyright (c) 2017 - 2018 Max Kueng and contributors
 
 MIT License
 
-
-[nodegreen-async]: http://node.green/#ES2017-features-async-functions
