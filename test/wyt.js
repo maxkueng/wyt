@@ -1,14 +1,14 @@
 import test from 'ava';
 import wyt from '../build';
 
-function timePassed(since, accuracy = 100) {
-  return Math.round((Date.now() - since) / accuracy) * accuracy;
+function timeSince(since) {
+  return Date.now() - since;
 }
 
 function roughly(value, expected, accuracy = 100) {
   const v = Math.round(value / accuracy) * accuracy;
   const e = Math.round(expected / accuracy) * accuracy;
-  return v === e;
+  return Math.abs(v - e) < accuracy;
 }
 
 test('1 per second', async (t) => {
@@ -18,15 +18,15 @@ test('1 per second', async (t) => {
   const waitTurn = wyt(rpi, interval);
 
   const t1 = await waitTurn();
-  t.is(0, timePassed(start));
+  t.true(roughly(0, timeSince(start)));
   const t2 = await waitTurn();
-  t.is(1000, timePassed(start));
+  t.true(roughly(1000, timeSince(start)));
   const t3 = await waitTurn();
-  t.is(2000, timePassed(start));
+  t.true(roughly(2000, timeSince(start)));
   const t4 = await waitTurn();
-  t.is(3000, timePassed(start));
+  t.true(roughly(3000, timeSince(start)));
   const t5 = await waitTurn();
-  t.is(4000, timePassed(start));
+  t.true(roughly(4000, timeSince(start)));
 
   t.log([t1, t2, t3, t4, t5]);
 
@@ -52,7 +52,7 @@ test('1 per second in parallel', async (t) => {
   ];
 
   const [t1, t2, t3, t4, t5] = await Promise.all(promises);
-  t.true(roughly(4000, timePassed(start)));
+  t.true(roughly(4000, timeSince(start)));
 
   t.log([t1, t2, t3, t4, t5]);
 
@@ -70,15 +70,15 @@ test('2 per second', async (t) => {
   const waitTurn = wyt(rpi, interval);
 
   const t1 = await waitTurn();
-  t.is(0, timePassed(start));
+  t.true(roughly(0, timeSince(start)));
   const t2 = await waitTurn();
-  t.is(0, timePassed(start));
+  t.true(roughly(0, timeSince(start)));
   const t3 = await waitTurn();
-  t.is(500, timePassed(start));
+  t.true(roughly(500, timeSince(start)));
   const t4 = await waitTurn();
-  t.is(1000, timePassed(start));
+  t.true(roughly(1000, timeSince(start)));
   const t5 = await waitTurn();
-  t.is(1500, timePassed(start));
+  t.true(roughly(1500, timeSince(start)));
 
   t.log([t1, t2, t3, t4, t5]);
 
@@ -104,7 +104,7 @@ test('2 per second in parallel', async (t) => {
   ];
 
   const [t1, t2, t3, t4, t5] = await Promise.all(promises);
-  t.true(roughly(3 * (interval / rpi), timePassed(start)));
+  t.true(roughly(3 * (interval / rpi), timeSince(start)));
 
   t.log([t1, t2, t3, t4, t5]);
 
@@ -123,15 +123,15 @@ test('multiple turns per take', async (t) => {
   const waitTurn = wyt(rpi, interval);
 
   const t1 = await waitTurn();
-  t.is(0, timePassed(start));
+  t.true(roughly(0, timeSince(start)));
   const t2 = await waitTurn();
-  t.is(0, timePassed(start));
+  t.true(roughly(0, timeSince(start)));
   const t3 = await waitTurn(2);
-  t.is(1000, timePassed(start));
+  t.true(roughly(1000, timeSince(start)));
   const t4 = await waitTurn();
-  t.is(1500, timePassed(start));
+  t.true(roughly(1500, timeSince(start)));
   const t5 = await waitTurn();
-  t.is(2000, timePassed(start));
+  t.true(roughly(2000, timeSince(start)));
 
   t.log([t1, t2, t3, t4, t5]);
 
