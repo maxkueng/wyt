@@ -18,8 +18,6 @@ const banner = bannerLines.join('\n');
 
 export default {
   input: 'src/index.js',
-  sourcemap: true,
-  banner,
   plugins: [
     babel({
       babelrc: false,
@@ -38,10 +36,14 @@ export default {
     {
       file: 'build/index.js',
       format: 'cjs',
+      sourcemap: true,
+      banner,
     },
     {
       file: 'build/index.es.js',
       format: 'es',
+      sourcemap: true,
+      banner,
     },
   ],
 };
