@@ -7,6 +7,8 @@ wyt - time-based rate limiter
 [![Maintainability](https://api.codeclimate.com/v1/badges/306ee5df3480babf4d9d/maintainability)](https://codeclimate.com/github/maxkueng/wyt/maintainability)
 [![Coverage Status](https://coveralls.io/repos/maxkueng/wyt/badge.svg?branch=master&service=github)](https://coveralls.io/github/maxkueng/wyt?branch=master)
 
+[![NPM](https://nodei.co/npm/wyt.png)](https://nodei.co/npm/wyt/)
+
 **wyt** (pronounced _wait_) is a time-based rate limiter that uses promises.
 
 ## Use Cases
