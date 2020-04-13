@@ -1,5 +1,5 @@
-import test from 'ava';
-import wyt from '../build';
+const test = require('ava');
+const wyt = require('../dist');
 
 function createTimer() {
   const start = Date.now();
@@ -145,6 +145,6 @@ test('multiple turns per take', async (t) => {
 
 test('throw if taking more turns per take than turnsperInterval', async (t) => {
   const waitTurn = wyt(2, 10);
-  await t.notThrows(waitTurn(2));
-  await t.throws(waitTurn(3));
+  await t.notThrowsAsync(() => waitTurn(2));
+  await t.throwsAsync(() => waitTurn(3));
 });

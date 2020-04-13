@@ -17,7 +17,8 @@
     "concurrency",
     "async",
     "await",
-    "bottleneck"
+    "bottleneck",
+    "typescript"
   ],
   "author": "Max Kueng (https://maxkueng.com/contact)",
   "license": "MIT",
@@ -30,49 +31,33 @@
     "url": "https://github.com/maxkueng/wyt/issues"
   },
   "main": "build/index.js",
-  "module": "build/index.es.js",
-  "jsnext:main": "build/index.es.js",
   "files": [
-    "build"
+    "dist"
   ],
   "scripts": {
-    "clean": "rimraf build",
-    "build:js": "rollup -c rollup.config.js",
-    "build": "npm-run-all -s clean build:js",
-    "lint": "eslint src/*.js",
-    "lint:fix": "eslint --fix src/*.js",
-    "flow": "flow check",
+    "clean": "rimraf dist",
+    "build": "tsc",
+    "lint": "eslint src/*.ts",
+    "lint:fix": "eslint --fix src/*.ts",
+    "test": "npm-run-all -s lint clean build test:js",
     "test:js": "nyc ava",
-    "run-tests": "npm-run-all -s lint flow test:js",
-    "test": "npm-run-all -s build run-tests",
     "publish-coverage": "nyc report --reporter=text-lcov | coveralls",
-    "prepublish": "npm-run-all -s build run-tests"
+    "prepublish": "npm-run-all -s test"
   },
   "devDependencies": {
-    "ava": "^0.25.0",
-    "babel-cli": "^6.26.0",
-    "babel-eslint": "^8.2.2",
-    "babel-plugin-syntax-flow": "^6.18.0",
-    "babel-plugin-transform-async-to-generator": "^6.24.1",
-    "babel-plugin-transform-flow-comments": "^6.22.0",
-    "babel-plugin-transform-object-rest-spread": "^6.26.0",
-    "coveralls": "^3.0.0",
-    "eslint": "^4.19.0",
-    "eslint-config-airbnb-base": "^12.1.0",
-    "eslint-plugin-flowtype": "^2.46.1",
-    "eslint-plugin-import": "^2.9.0",
-    "flow-bin": "^0.68.0",
-    "npm-run-all": "^4.1.2",
-    "nyc": "^11.6.0",
-    "rimraf": "^2.6.2",
-    "rollup": "^0.57.1",
-    "rollup-plugin-babel": "^3.0.3",
-    "rollup-plugin-commonjs": "^9.1.0"
+    "@typescript-eslint/eslint-plugin": "^2.27.0",
+    "@typescript-eslint/parser": "^2.27.0",
+    "ava": "^3.6.0",
+    "coveralls": "^3.0.11",
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb-base": "^14.1.0",
+    "eslint-plugin-import": "^2.20.2",
+    "npm-run-all": "^4.1.5",
+    "nyc": "^15.0.1",
+    "rimraf": "^3.0.2",
+    "typescript": "^3.8.3"
   },
   "engines": {
     "node": ">=6.10.0"
-  },
-  "ava": {
-    "require": "babel-register"
   }
 }

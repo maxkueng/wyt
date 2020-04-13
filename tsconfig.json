@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "moduleResolution": "node",
+    "target": "es5",
+    "module": "commonjs",
+    "esModuleInterop": true,
+    "sourceMap": true,
+    "lib": [
+      "dom",
+      "es2018"
+    ],
+    "declaration": true,
+    "outDir": "./dist",
+    "strict": true
+  },
+  "include": ["./src"]
+}

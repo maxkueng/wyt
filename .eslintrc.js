@@ -1,11 +1,26 @@
 module.exports = {
+  plugins: [
+    '@typescript-eslint',
+  ],
   extends: [
     'airbnb-base',
-    'plugin:flowtype/recommended',
+    'plugin:@typescript-eslint/recommended',
   ],
-  plugins: [
-    'flowtype',
-  ],
+  settings: {
+    'import/parsers': {
+      '@typescript-eslint/parser': ['.ts', '.tsx'],
+    },
+    'import/resolver': {
+      node: {
+        paths: ['./src'],
+        extensions: [
+          '.ts',
+          '.js',
+        ],
+      },
+    },
+  },
+
   rules: {
     'semi-style': 'off',
     'import/prefer-default-export': 'off',
