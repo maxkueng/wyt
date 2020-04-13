@@ -30,7 +30,7 @@
   "bugs": {
     "url": "https://github.com/maxkueng/wyt/issues"
   },
-  "main": "build/index.js",
+  "main": "dist/index.js",
   "files": [
     "dist"
   ],
