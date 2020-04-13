@@ -9,7 +9,7 @@ function createTimer() {
 function roughly(value, expected, accuracy = 100) {
   const v = Math.round(value / accuracy) * accuracy;
   const e = Math.round(expected / accuracy) * accuracy;
-  return Math.abs(v - e) < accuracy;
+  return Math.abs(v - e) <= accuracy;
 }
 
 test('1 per second', async (t) => {
