@@ -110,7 +110,7 @@ requested at the same time the promise will reject.
 
 ## License
 
-Copyright (c) 2017 - 2018 Max Kueng and contributors
+Copyright (c) 2017 - 2020 Max Kueng and contributors
 
 MIT License
 
