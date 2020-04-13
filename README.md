@@ -82,7 +82,7 @@ async function update() {
 update();
 ```
 
-If, for example, `updateMyStuff()` takes 900ms that `rateLimit()` will wait only 100ms.
+If, for example, `updateMyStuff()` takes 900ms then `rateLimit()` will wait only 100ms.
 
 ## API
 
