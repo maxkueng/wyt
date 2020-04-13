@@ -14,13 +14,23 @@ wyt - time-based rate limiter
 ## Use Cases
 
  - Limiting calls to APIs that only allow a limited number of requests within a
-   certain period.
+   certain period. Just call it before your HTTP requests.
+
+ - As an alternative to `setInterval` or `setTimeout` in polling loops. 
+
+   If you want to run run a function every second and you use `setInterval`, your function might run multiple times at the same time if your function occasionally takes more than 1 second to run. This might cause problems.
+
+   Alternatively, if you use `setTimeout(update, 1000)` in a recursive update loop, your update interval will be 1000ms plus the time it takes for your update function to run. You'd have to measure the time and dynamically set the timeout.
+
+   _wyt_ takes care of this for you. It'll make sure that your update function
+   runs every second unless the update function takes more than 1s to run, in
+   which case it will run it again immediately.
 
 ## Features
 
  - Promise-based API
  - Full test coverage
- - Flow typed
+ - TypeScript support
  - Easy to use
 
 ## Installation
@@ -30,6 +40,8 @@ npm install --save wyt
 ```
 
 ## Usage
+
+### Rate-limiting API calls
 
 Just put it in front of your HTTP requests.
 
@@ -44,119 +56,57 @@ async function getStuff() {
   const response = await fetch('/stuff');
   return response.json();
 }
+
+await getStuff();
+await getStuff();
+await getStuff();
+await getStuff();
+await getStuff();
+await getStuff(); // has to wait unless the previous 5 calls together took longer than 1000ms
 ```
 
-## API
-
-### const waitTurn = wyt(turnsPerInterval: number, interval: number)
-
- - `turnsPerInterval` _(number)_: The number of turns that can be taken within
-   a certain interval.
- - `interval` _(number)_: The interval within which `turnsPerInterval` can be executed.
-
-Returns a function `(turns?: number) => Promise<number>` that can be called
-before before requesting a rate-limited resource (i.e. wait for its turn) in
-order to not exceed the limit.
-
-### const timeWaited = await waitTurn(turns?: number)
-
- - `turns` _(number, optional, default: 1)_: The number of turns that will be
-   taken at the same time. You can not await more turns at the same time as
-   `turnsPerInterval`.
-
-Returns a promise `Promise<number>` that will resolve with the time waited as soon as another turn can be taken. If
-more than `turnsPerInterval` are requested at the same time the promise will
-reject.
-
-## Example
-
-Alice, Bob, Cindy, Derek, Elizabeth, Fred, Gwendolyn, Herbert and Iris want to
-buy tickets for a theater. They coincidentally queue up at the ticket desk in
-alphabetical order.  
-Derek and Elizabeth are friends and buy their tickets together.  
-Gwendolyn, Herbert and Iris are a group and want to buy their tickets together
-too.
-
-Barbara, who works at the ticket desk, can handle 2 customers at the same time
-in only 1 second, and she can handle a single customer in only 0.5 seconds. But
-if she has to handle 3 customers at the same time it's too stressful for her
-and she rejects them.
+### Update loops
 
 ```js
 import wyt from 'wyt';
 
-/**
- * A helper function that returns the seconds that have passed.
- */
-function timePassed() {
-  this.start = this.start || Date.now();
-  return Math.round(((Date.now() - this.start) / 1000) * 10) / 10;
+// Once per second
+const rateLimit = wyt(1, 1000);
+
+async function update() {
+  await rateLimit();
+  await updateMyStuff();
+  update();
 }
 
-/**
- * The ticket desk can handle 2 customers per 1000 milliseconds.
- */
-const waitTurn = wyt(2, 1000);
+update();
+```
 
-await waitTurn();
-console.log(`Alice waited ${timePassed()} seconds`);
-// > Alice waited 0 seconds
+If, for example, `updateMyStuff()` takes 900ms that `rateLimit()` will wait only 100ms.
 
-await waitTurn();
-console.log(`Bob waited ${timePassed()} seconds`);
-// > Bob waited 0 seconds
+## API
 
-/**
- * Alice and Bob got their tickets immediately because Barbara was prepared and
- * nobody was waiting at the ticket desk before.
- */
+### const rateLimit = wyt(requestsPerInterval: number, interval: number)
 
-await waitTurn();
-console.log(`Cindy waited ${timePassed()} seconds`);
-// Cindy waited 0.5 seconds
+ - `requestsPerInterval` _(number)_: The number of requests that can be
+   executed within a certain interval.
+ - `interval` _(number)_: The interval within which `requestsPerInterval` can
+   be executed.
 
-/**
- * Cindy got her ticket afer half a second because Barbara can handle a single
- * customer in 1000 / 2 milliseconds.
- */
+Returns a function `(requests?: number) => Promise<number>` that can be called
+before before requesting a rate-limited resource in order to not exceed the
+limit.
 
-/**
- * Derek and Elizabeth go together and take 2 turns at the same time.
- */
-await waitTurn(2);
-console.log(`Derek and Elizabeth waited ${timePassed()} seconds`);
-// Derek and Elisabeth waited 1.5 seconds
+### const timeWaited = await rateLimit(requests?: number)
 
-/**
- * Derek and Elizabeth had to wait a full second after Cindy because it takes
- * Barbara a whole second to process two customers.
- */
+ - `requests` _(number, optional, default: 1)_: The number of requests that
+   will be used at the same time. For example, if your code fetches two
+   resources in parallel. You can not use more requests at the same time as
+   `requestsPerInterval`.
 
-await waitTurn();
-console.log(`Fred waited ${timePassed()} seconds`);
-// Fred waited 2 seconds
-
-/**
- * Fred waited a total of two seconds, but only 0.5 seconds after Derek and
- * Elizabeth.
- */
-
-/**
- * Gwendolyn, Herbert and Iris want to buy tickets at the same time.
- */
-await waitTurn(3);
-console.log(`Gwendolyn waited ${timePassed()} seconds`);
-// UnhandledPromiseRejectionWarning: Unhandled promise rejection (rejection id:2):
-//   Error: Turns can not be greater than the number of turns per interval
-
-/**
- * Barbara can only handle 2 customers per 1000ms so she rejected the whole
- * group by throwing an exception.
- * In order to handle the group of three she would have to be able to handle 3
- * customers per 1500ms instead.
- */
- 
- ```
+Returns a promise `Promise<number>` that will resolve with the time waited as
+soon as another request can be made. If more than `requestsPerInterval` are
+requested at the same time the promise will reject.
 
 ## License
 
