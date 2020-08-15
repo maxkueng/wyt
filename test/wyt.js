@@ -1,3 +1,4 @@
+/** @type {typeof import('ava').default} */
 const test = require('ava');
 const wyt = require('../dist');
 
@@ -147,4 +148,35 @@ test('throw if taking more turns per take than turnsperInterval', async (t) => {
   const waitTurn = wyt(2, 10);
   await t.notThrowsAsync(() => waitTurn(2));
   await t.throwsAsync(() => waitTurn(3));
+});
+
+test('2 per second in parallel, twice', async (t) => {
+  const timer = createTimer();
+  const rpi = 2;
+  const interval = 1000;
+  const waitTurn = wyt(rpi, interval);
+
+  async function batch() {
+    const promises = [
+      waitTurn(),
+      waitTurn(),
+      waitTurn(),
+      waitTurn(),
+      waitTurn(),
+    ];
+
+    const [t1, t2, t3, t4, t5] = await Promise.all(promises);
+    t.true(roughly(3 * (interval / rpi), timer()));
+
+    t.log([t1, t2, t3, t4, t5]);
+
+    t.true(roughly(t1, 0 * (interval / rpi)));
+    t.true(roughly(t2, 0 * (interval / rpi)));
+    t.true(roughly(t3, 1 * (interval / rpi)));
+    t.true(roughly(t4, 2 * (interval / rpi)));
+    t.true(roughly(t5, 3 * (interval / rpi)));
+  }
+  await batch();
+  await new Promise((resolve) => setTimeout(resolve, 100));
+  await batch();
 });
