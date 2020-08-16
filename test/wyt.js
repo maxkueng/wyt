@@ -150,13 +150,13 @@ test('throw if taking more turns per take than turnsperInterval', async (t) => {
   await t.throwsAsync(() => waitTurn(3));
 });
 
-test('2 per second in parallel, twice', async (t) => {
-  const timer = createTimer();
+test('2 per second in parallel, after different timeoutss', async (t) => {
   const rpi = 2;
   const interval = 1000;
   const waitTurn = wyt(rpi, interval);
 
   async function batch() {
+    const timer = createTimer();
     const promises = [
       waitTurn(),
       waitTurn(),
@@ -177,6 +177,9 @@ test('2 per second in parallel, twice', async (t) => {
     t.true(roughly(t5, 3 * (interval / rpi)));
   }
   await batch();
-  await new Promise((resolve) => setTimeout(resolve, 100));
+  // let enough time for wyt to think the previous batch has enough processed
+  await new Promise((resolve) => setTimeout(resolve, 1000));
   await batch();
+  // ensure that wyt won't next try to overprocess after a long wait
+  await new Promise((resolve) => setTimeout(resolve, 3500));
 });
