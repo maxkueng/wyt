@@ -12,7 +12,7 @@ type State = {
 function reload(requestsPerInterval: number, interval: number, state: State): State {
   const throughput = requestsPerInterval / interval;
   const now = Date.now();
-  const reloadTime = Math.min(now - state.lastReload, interval);
+  const reloadTime = now - state.lastReload;
   const reloadedRequests = reloadTime * throughput;
   const newAvalableRequests = state.availableRequests + reloadedRequests;
 
